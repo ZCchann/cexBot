@@ -1,0 +1,24 @@
+{
+  "debug": false,
+  "binance_config": {
+    "api_key": "",
+    "secret_key": ""
+  },
+  "okx_config": {
+    "api_key": "",
+    "secret_key": "",
+    "passphrase": ""
+  },
+  "mongodb": {
+    "username": "",
+    "password": "",
+    "host": "",
+    "port": "",
+    "database": ""
+  },
+  "telegram": {
+    "bot_id": "",
+    "channel_id": "",
+    "error_channel_id": ""
+  }
+}
