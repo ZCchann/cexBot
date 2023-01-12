@@ -79,4 +79,4 @@ chmod +x shell/install.sh
 
 如果你觉得这个程序对你有帮助,你可以通过下面的地址捐赠更好的支持cexbot
 
-ETH address: **0x6aB9886a6B86F649F9FfAA97074F7aa2F461494E**
+ETH/BSC address: **0x6aB9886a6B86F649F9FfAA97074F7aa2F461494E**

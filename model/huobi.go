@@ -35,5 +35,5 @@ func (m *HuobiTable) Save() error {
 }
 
 func (m *HuobiTable) Delete() error {
-	return db.Mgo().Table(m.TableName()).DeleteMany(bson.M{"address": m.Coin})
+	return db.Mgo().Table(m.TableName()).DeleteMany(bson.M{"coin": m.Coin})
 }

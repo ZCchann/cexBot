@@ -9,6 +9,10 @@
     "secret_key": "",
     "passphrase": ""
   },
+  "bybit_config": {
+    "api_key": "",
+    "secret_key": ""
+  },
   "mongodb": {
     "username": "",
     "password": "",

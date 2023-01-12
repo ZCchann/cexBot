@@ -49,7 +49,7 @@ func main() {
 		go apps.HuobiDiffer()
 		go apps.KuCoinDiffer()
 		go apps.MexcDiffer()
+		go apps.BybitDiffer()
 		time.Sleep(60 * time.Second)
 	}
-
 }

@@ -35,5 +35,5 @@ func (m *GateIoTable) Save() error {
 }
 
 func (m *GateIoTable) Delete() error {
-	return db.Mgo().Table(m.TableName()).DeleteMany(bson.M{"address": m.Coin})
+	return db.Mgo().Table(m.TableName()).DeleteMany(bson.M{"coin": m.Coin})
 }

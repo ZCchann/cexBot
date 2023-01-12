@@ -1,8 +1,6 @@
 package conf
 
 import (
-	"dexBot/pkg/config"
-	"dexBot/pkg/log"
 	"sync"
 )
 
@@ -11,6 +9,7 @@ type (
 		Debug    bool           `json:"debug"            desc:"是否开启Debug模式"`
 		Binance  binanceConfig  `json:"binance_config"   desc:"binance配置"`
 		OKX      okxConfig      `json:"okx_config"       desc:"okx配置"`
+		Bybit    bybitConfig    `json:"bybit_config"     desc:"bybit配置"`
 		Mongodb  mgoConfig      `json:"mongodb"          desc:"mongodb"`
 		Telegram telegramConfig `json:"telegram"         desc:"telegram机器人信息"`
 	}
@@ -24,6 +23,11 @@ type (
 		ApiKey     string `json:"api_key"`
 		SecretKey  string `json:"secret_key"`
 		Passphrase string `json:"passphrase"`
+	}
+
+	bybitConfig struct {
+		ApiKey    string `json:"api_key"`
+		SecretKey string `json:"secret_key"`
 	}
 
 	mgoConfig struct {
@@ -45,13 +49,6 @@ var (
 	c    = new(conf)
 	lock = new(sync.RWMutex)
 )
-
-func Init(file string) {
-	err := config.BindJSON(file, &c)
-	if err != nil {
-		log.Fatalln("初始化配置文件失败：", err)
-	}
-}
 
 func Conf() *conf {
 	lock.RLock()

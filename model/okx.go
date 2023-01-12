@@ -35,5 +35,5 @@ func (m *OkxTable) Save() error {
 }
 
 func (m *OkxTable) Delete() error {
-	return db.Mgo().Table(m.TableName()).DeleteMany(bson.M{"address": m.Coin})
+	return db.Mgo().Table(m.TableName()).DeleteMany(bson.M{"coin": m.Coin})
 }
