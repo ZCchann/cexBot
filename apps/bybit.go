@@ -45,7 +45,7 @@ func BybitDiffer() {
 			"X-BAPI-TIMESTAMP":   timeStamp,
 			"X-BAPI-RECV-WINDOW": "5000",
 		},
-		RequestTimeout: 5 * time.Second,
+		RequestTimeout: 20 * time.Second,
 	})
 	if err != nil {
 		logger.Error("bybit API获取异常 请检查: ", err)
@@ -60,12 +60,21 @@ func BybitDiffer() {
 		return
 	}
 
+	if ret.RetCode == 10002 {
+		// 时间戳超时 跳过
+		return
+	}
+
+	if ret.RetCode != 0 && ret.RetMsg != "OK" {
+		logger.Error("bybit api请求错误 请检查: ", ret.RetMsg)
+		return
+	}
+
 	// 清洗数据 把api返回结果丢到一个切片中
 	apiData := make([]string, 0)
 	for _, k := range ret.Result.Rows {
 		apiData = append(apiData, k.Coin)
 	}
-
 	add, data, err := Check(apiData, model.BybitDBTableName)
 	if err != nil {
 		logger.Error(err)

@@ -15,6 +15,11 @@ type BinanceData struct {
 	Coin string `json:"coin"`
 }
 
+type BinanceError struct {
+	Code int    `json:"code"`
+	Msg  string `json:"msg"`
+}
+
 func BinanceDiffer() {
 	// 文档地址 https://binance-docs.github.io/apidocs/spot/cn/#user_data
 	url := "https://api.binance.com/sapi/v1/capital/config/getall"
@@ -31,7 +36,7 @@ func BinanceDiffer() {
 		Headers: map[string]string{
 			"X-MBX-APIKEY": conf.Conf().Binance.ApiKey,
 		},
-		RequestTimeout: 1 * time.Second,
+		RequestTimeout: 20 * time.Second,
 	})
 	if err != nil {
 		logger.Error("币安交易所获取API错误 请检查: ", err)
@@ -39,8 +44,18 @@ func BinanceDiffer() {
 		return
 	}
 	if !resp.Ok {
-		logger.Error("resp !ok ", resp.StatusCode)
-		logger.Error("resp err: ", resp.String())
+		var retError BinanceError
+		err = resp.JSON(&retError)
+		if err != nil {
+			logger.Error("绑定到结构体失败: ", err)
+			return
+		}
+
+		if retError.Code == -1021 {
+			// 请求超时 跳过
+			return
+		}
+
 		telegram.SendError("币安交易所获取API错误回传信息 请检查: " + resp.String())
 		return
 	}

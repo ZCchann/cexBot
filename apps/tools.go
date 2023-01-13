@@ -17,7 +17,7 @@ import (
 // Get grequests的get请求 二次封装
 func Get(url string) (ret *grequests.Response, err error) {
 	resp, err := grequests.Get(url, &grequests.RequestOptions{
-		RequestTimeout: 2 * time.Second,
+		RequestTimeout: 20 * time.Second,
 	})
 	if err != nil {
 		return nil, err
@@ -73,6 +73,11 @@ func mgoDelete(MgoTableName, data string) {
 
 // Check 与数据库交互检查
 func Check(ApiData []string, dbName string) (add bool, data []string, err error) {
+	if len(ApiData) == 0 {
+		// 检查一下传进来的数量 如果等于0就直接扔掉
+		err = fmt.Errorf("no Apidata")
+		return false, nil, err
+	}
 	var objs = make([]*model.KuCoinTable, 0)
 	var DBData []string
 	err = db.Mgo().Table(dbName).Find(bson.M{}).All(&objs)
@@ -83,7 +88,6 @@ func Check(ApiData []string, dbName string) (add bool, data []string, err error)
 	// 取出数据库数据 转换为切片
 	for _, obj := range objs {
 		DBData = append(DBData, obj.Coin)
-
 	}
 
 	// 对比长度 长度大于数据库 说明有新数据 返回差集
@@ -98,9 +102,9 @@ func Check(ApiData []string, dbName string) (add bool, data []string, err error)
 		for _, i := range minus {
 			mgoDelete(dbName, i)
 		}
-		//telegram.SendError(fmt.Sprintf("数据库%s 库内数据比API返回数据多 请检查\n 数据:%s", dbName, minus))
-		//log.Println(fmt.Errorf("数据库%s 库内数据比API返回数据多 请检查 数据:%s", dbName, minus))
-		return false, nil, fmt.Errorf("数据库%s 库内数据比API返回数据多 请检查 数据:%s", dbName, minus)
+
+		err := fmt.Errorf("数据库%s 库内数据比API返回数据多 请检查 数据:%s", dbName, minus)
+		return false, nil, err
 	}
 	return false, nil, nil
 }
